@@ -39,12 +39,13 @@ function getStringLength(value) {
  */
 function isString(value) {
   let result = false;
-  if (typeof value.toString() === 'string' && value) {
-    result = true;
+  if (value !== undefined && value !== null) {
+    if (typeof value.valueOf() === 'string') {
+      result = true;
+    }
   }
   return result;
 }
-
 /**
  * Returns the result of concatenation of two strings.
  *
@@ -151,7 +152,10 @@ function repeatString(str, times) {
  *   removeFirstOccurrences('ABABAB', 'BA') => 'ABAB'.
  */
 function removeFirstOccurrences(str, value) {
-  return str.replace(value, '');
+  return str.includes(value)
+    ? str.substring(0, str.indexOf(value)) +
+        str.substring(str.indexOf(value) + value.length)
+    : str;
 }
 
 /**
@@ -166,8 +170,11 @@ function removeFirstOccurrences(str, value) {
  *   removeLastOccurrences('I like legends', 'end') => 'I like legs'.
  *   removeLastOccurrences('ABABAB', 'BA') => 'ABAB'.
  */
-function removeLastOccurrences(/* str, value */) {
-  throw new Error('Not implemented');
+function removeLastOccurrences(str, value) {
+  return str.includes(value)
+    ? str.substring(0, str.lastIndexOf(value)) +
+        str.substring(str.lastIndexOf(value) + value.length)
+    : str;
 }
 
 /**
@@ -182,8 +189,10 @@ function removeLastOccurrences(/* str, value */) {
  *   sumOfCodes('') => 0
  *   sumOfCodes() => 0
  */
-function sumOfCodes(/* str */) {
-  throw new Error('Not implemented');
+function sumOfCodes(str) {
+  return typeof str === 'string'
+    ? str.split('').reduce((acc, el) => acc + el.charCodeAt(), 0)
+    : 0;
 }
 
 /**
@@ -197,8 +206,8 @@ function sumOfCodes(/* str */) {
  *   startsWith('Hello World', 'World') => false
  *   startsWith('Hello World', 'Hello') => true
  */
-function startsWith(/* str, substr */) {
-  throw new Error('Not implemented');
+function startsWith(str, substr) {
+  return str.startsWith(substr, 0);
 }
 
 /**
@@ -212,8 +221,8 @@ function startsWith(/* str, substr */) {
  *   endsWith('Hello World', 'World') => true
  *   endsWith('Hello World', 'Hello') => false
  */
-function endsWith(/* str, substr */) {
-  throw new Error('Not implemented');
+function endsWith(str, substr) {
+  return str.endsWith(substr);
 }
 
 /**
@@ -229,10 +238,18 @@ function endsWith(/* str, substr */) {
  *   formatTime(0, 45) => "00:45"
  *   formatTime(0, 0) => "00:00"
  */
-function formatTime(/* minutes, seconds */) {
-  throw new Error('Not implemented');
+function formatTime(minutes, seconds) {
+  let result = `${minutes}:`;
+  if (minutes < 10) {
+    result = `0${minutes}:`;
+  }
+  if (seconds < 10) {
+    result += `0${seconds}`;
+  } else {
+    result += `${seconds}`;
+  }
+  return result;
 }
-
 /**
  * Returns a string in reverse order.
  *
